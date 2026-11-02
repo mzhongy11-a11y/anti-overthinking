@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>密码管理后台 · 反内耗指数测试</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="admin-wrap">
+    <h1>密码管理后台</h1>
+    <p>批量生成测试密码 · 查看使用情况</p>
+  </div>
+</div>
+
+<div class="admin-wrap">
+
+  <!-- 登录 -->
+  <section id="admin-login">
+    <div class="card" style="max-width:420px;margin:20px auto">
+      <h3 style="margin:0 0 6px">管理员登录</h3>
+      <p style="margin:0 0 14px;font-size:13px;color:var(--ink3);line-height:1.7">
+        使用你在 Supabase 里创建的<b>管理员邮箱和密码</b>登录。<br>公开注册已关闭，只有该账号能进入本后台。
+      </p>
+      <input id="inp-admin-email" type="email" autocomplete="username" placeholder="管理员邮箱" style="width:100%;padding:13px 15px;border:1.5px solid var(--line);border-radius:12px;font-size:15px;outline:none">
+      <input id="inp-admin-pass" type="password" autocomplete="current-password" placeholder="登录密码" style="width:100%;padding:13px 15px;margin-top:10px;border:1.5px solid var(--line);border-radius:12px;font-size:15px;outline:none">
+      <button class="btn" id="btn-admin-login" style="margin-top:12px">登录</button>
+      <div class="err" id="admin-err"></div>
+    </div>
+  </section>
+
+  <!-- 面板 -->
+  <section id="admin-panel" class="hidden">
+    <div class="stat-grid" id="stats"></div>
+
+    <div class="card">
+      <div class="sec-title"><span class="n">＋</span>批量生成密码</div>
+      <div class="toolbar">
+        <span style="font-size:13.5px;color:var(--ink2)">数量</span>
+        <input id="gen-count" type="number" min="1" max="500" value="10" style="width:90px">
+        <span style="font-size:13.5px;color:var(--ink2)">每个可用</span>
+        <input id="gen-uses" type="number" min="1" max="20" value="3" style="width:80px">
+        <span style="font-size:13.5px;color:var(--ink2)">次</span>
+        <input id="gen-note" type="text" placeholder="备注（如：双11批次）" style="flex:1;min-width:150px">
+        <button class="btn sm" id="btn-gen" style="width:auto;padding:9px 18px">生成</button>
+      </div>
+      <div id="gen-out" class="codes-out hidden"></div>
+      <div class="toolbar hidden" id="gen-acts" style="margin-top:10px">
+        <button class="mini" id="btn-copy-codes">复制全部</button>
+        <button class="mini" id="btn-copy-lines">复制（每行一个 + 链接）</button>
+        <button class="mini" id="btn-download-codes">导出 TXT</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sec-title"><span class="n">≡</span>密码列表</div>
+      <div class="toolbar">
+        <select id="f-filter">
+          <option value="all">全部</option>
+          <option value="unused">未使用</option>
+          <option value="used">已使用</option>
+          <option value="exhausted">已用完</option>
+          <option value="disabled">已停用</option>
+        </select>
+        <input id="f-search" type="text" placeholder="搜索密码 / 备注" style="flex:1;min-width:130px">
+        <button class="mini" id="btn-search">查询</button>
+      </div>
+      <div style="overflow:auto">
+        <table class="tbl">
+          <thead><tr><th>密码</th><th>用量</th><th>状态</th><th>备注</th><th>最近使用</th><th>操作</th></tr></thead>
+          <tbody id="code-rows"></tbody>
+        </table>
+      </div>
+      <div class="pager">
+        <button class="mini" id="p-prev">上一页</button>
+        <span id="p-info">-</span>
+        <button class="mini" id="p-next">下一页</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sec-title"><span class="n">⚙</span>账号与安全</div>
+      <p style="margin:0 0 10px;font-size:13px;color:var(--ink3)">
+        当前登录：<b id="admin-who">-</b>　·　修改 Supabase 登录密码（至少 8 位，建议含大小写字母与数字）
+      </p>
+      <div class="toolbar">
+        <input id="new-key" type="password" placeholder="新登录密码（至少 8 位）" style="flex:1;min-width:150px">
+        <button class="mini" id="btn-set-key">保存新密码</button>
+      </div>
+      <div class="toolbar" style="margin-top:4px">
+        <button class="mini" id="btn-logout" style="color:#c0392b">退出登录</button>
+        <a class="mini" href="index.html" style="text-decoration:none">← 返回测评页</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div id="toast"></div>
+
+<script src="js/vendor/supabase.js"></script>
+<script src="js/env.js"></script>
+<script src="js/config.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

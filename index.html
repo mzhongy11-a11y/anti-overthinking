@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<meta name="theme-color" content="#4a6cf7">
+<title>反内耗指数测试</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <h1>反内耗指数测试</h1>
+    <p>30 道题 · 测测你的心理电量还剩多少</p>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ 1. 密码门 ============ -->
+  <section id="screen-gate">
+    <div class="card gate-hero">
+      <div class="big">🔋</div>
+      <h2>开始之前，请输入测试密码</h2>
+      <p>每个密码可使用 3 次 · 答题约 3 分钟</p>
+      <div class="field">
+        <input id="inp-code" type="text" placeholder="请输入密码" autocomplete="off"
+               autocapitalize="characters" spellcheck="false" maxlength="24">
+      </div>
+      <button id="btn-verify" class="btn" style="margin-top:14px">验证并开始测试</button>
+      <div id="gate-err" class="err"></div>
+      <div class="tips">密码不区分大小写 · 购买后由客服发放<br>遇到问题请联系店铺客服</div>
+    </div>
+  </section>
+
+  <!-- ============ 2. 答题 ============ -->
+  <section id="screen-quiz" class="hidden">
+    <div class="progress">
+      <div class="row"><span>第 <b id="q-idx">1</b> / 30 题</span><span id="q-hint">请选择最符合你的一项</span></div>
+      <div class="bar"><i id="q-bar" style="width:3%"></i></div>
+    </div>
+    <div class="qcard">
+      <div class="qdim" id="q-dimtag">维度</div>
+      <p class="qtext" id="q-text">题目</p>
+      <div class="opts" id="q-opts"></div>
+      <div class="qnav">
+        <button class="prev" id="btn-prev">上一题</button>
+        <button class="next" id="btn-next">下一题</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. 结果 ============ -->
+  <section id="screen-result" class="hidden">
+    <div id="share-banner" class="card hidden" style="text-align:center;font-size:13.5px;color:var(--ink2);padding:12px">
+      这是好友分享的测评结果 · <a href="javascript:location.href=location.pathname" style="color:var(--brand);font-weight:600">我也要测一测 →</a>
+    </div>
+
+    <div id="capture">
+      <div class="res-hero">
+        <div class="idx"><span id="r-index">0</span><small>分</small></div>
+        <div class="lvl" id="r-level">等级</div>
+        <div class="who"><em id="r-emoji">☁️</em><span id="r-type">类型</span></div>
+        <div class="tag" id="r-tagline">特征</div>
+        <div class="quote" id="r-quote">金句</div>
+      </div>
+
+      <div class="card">
+        <div class="sec-title"><span class="n">1</span>你的六维内耗画像</div>
+        <div class="radar-wrap"><div id="radar"></div></div>
+        <div id="dim-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="sec-title"><span class="n">2</span>你为什么会这样</div>
+        <div class="theory" id="r-theory"></div>
+      </div>
+
+      <div class="card">
+        <div class="sec-title"><span class="n">3</span>给你的三步破解法</div>
+        <ol class="steps" id="r-steps"></ol>
+      </div>
+
+      <div class="card">
+        <div class="sec-title"><span class="n">4</span>你的反内耗小咒语</div>
+        <div class="spell" id="r-spell">咒语</div>
+      </div>
+
+      <div class="share-note" id="capture-foot">
+        反内耗指数测试 · 本测评为娱乐与自我探索工具，不作为临床诊断依据
+      </div>
+    </div>
+
+    <div class="acts" style="margin-top:16px">
+      <button class="btn sm" id="btn-save">💾 保存结果长图</button>
+      <button class="btn sm" id="btn-copy">🔗 复制结果链接</button>
+      <button class="btn light sm" id="btn-retest">🔄 再测一次</button>
+      <button class="btn ghost sm" id="btn-gift">🎁 好评有礼</button>
+    </div>
+    <div class="disclaimer" style="margin-top:14px">
+      本测评改编自心理学研究，仅供自我探索与娱乐，<b>不作为临床诊断依据</b>。<br>
+      若情绪低落、失眠持续两周以上，建议寻求专业心理咨询或就医。
+    </div>
+  </section>
+</div>
+
+<!-- ============ 弹窗：好评有礼 ============ -->
+<div id="modal-gift" class="modal hidden">
+  <div class="mask" data-close="1"></div>
+  <div class="box">
+    <h3 id="gift-title">好评有礼 🎁</h3>
+    <div class="lines" id="gift-lines"></div>
+    <div class="tail" id="gift-tail"></div>
+    <button class="btn close" data-close="1">我知道啦</button>
+  </div>
+</div>
+
+<!-- ============ 弹窗：保存长图 ============ -->
+<div id="modal-save" class="modal hidden">
+  <div class="mask" data-close="1"></div>
+  <div class="box">
+    <h3>保存你的测评结果</h3>
+    <div class="save-box" id="save-box"></div>
+    <div class="save-hint" id="save-hint"></div>
+    <div class="acts" style="margin-top:14px">
+      <button class="btn light sm" id="btn-download">下载到本机</button>
+      <button class="btn ghost sm" data-close="1">关闭</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="js/vendor/supabase.js"></script>
+<script src="js/env.js"></script>
+<script src="js/config.js"></script>
+<script src="js/data.js"></script>
+<script src="js/vendor/html2canvas.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
